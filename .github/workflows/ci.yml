@@ -42,6 +42,16 @@ jobs:
       - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
 
+      - name: Install Playwright dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2t64
+
+      - name: Install Playwright browsers
+        run: |
+          mvn test-compile exec:java@install-playwright-browsers \
+          --no-transfer-progress
+
       - name: Install Playwright browsers
         run: mvn test-compile exec:java@install-playwright-browsers --no-transfer-progress
 
