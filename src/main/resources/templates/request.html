@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head><title>Yêu cầu mượn sách – LMS</title></head>
+<body>
+<main>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="mb-4">Yêu cầu mượn sách (UC10)</h2>
+
+      <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+      <div th:if="${error}"   class="alert alert-danger"  th:text="${error}"></div>
+
+      <form th:action="@{/request}" method="post" class="card card-body shadow-sm">
+        <div class="mb-3">
+          <label class="form-label">Độc giả</label>
+          <select name="readerId" class="form-select" required>
+            <option value="">-- Chọn độc giả --</option>
+            <option th:each="r : ${readers}" th:value="${r.readerId}"
+                    th:text="${r.readerId + ' – ' + r.name}"></option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Sách</label>
+          <select name="isbn" class="form-select" required>
+            <option value="">-- Chọn sách --</option>
+            <option th:each="b : ${books}" th:value="${b.isbn}"
+                    th:text="${b.title + ' (' + b.availableCopies + ' còn)'}"></option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Ngày yêu cầu</label>
+          <input type="date" name="requestDate" class="form-control" th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" required/>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Gửi yêu cầu</button>
+      </form>
+    </div>
+  </div>
+</main>
+</body>
+</html>

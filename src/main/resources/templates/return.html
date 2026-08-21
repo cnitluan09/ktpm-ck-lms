@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head><title>Trả sách – LMS</title></head>
+<body>
+<main>
+  <h2 class="mb-4">Trả sách (UC12)</h2>
+
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${warning}" class="alert alert-warning" th:text="${warning}"></div>
+  <div th:if="${error}"   class="alert alert-danger"  th:text="${error}"></div>
+
+  <div th:if="${#lists.isEmpty(borrowedLoans)}" class="alert alert-info">
+    Không có phiếu nào đang mượn.
+  </div>
+
+  <div th:each="l : ${borrowedLoans}" class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Phiếu #<span th:text="${l.id}"></span></div>
+    <div class="card-body">
+      <p class="mb-1"><strong>Độc giả:</strong> <span th:text="${l.reader.name}"></span></p>
+      <p class="mb-1"><strong>Sách:</strong> <span th:text="${l.book.title}"></span></p>
+      <p class="mb-1"><strong>Hạn trả:</strong>
+        <span th:text="${l.dueDate}"
+              th:classappend="${l.dueDate.isBefore(#temporals.createToday())} ? 'text-danger fw-bold' : ''"></span>
+      </p>
+      <p class="mb-3"><strong>Đã gia hạn:</strong> <span th:text="${l.renewed} ? 'Có' : 'Chưa'"></span></p>
+
+      <form th:action="@{/return}" method="post" class="d-flex gap-2 align-items-center">
+        <input type="hidden" name="loanId" th:value="${l.id}"/>
+        <input type="date" name="returnDate" class="form-control form-control-sm"
+               th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" required/>
+        <button type="submit" class="btn btn-primary btn-sm">Xác nhận trả</button>
+      </form>
+    </div>
+  </div>
+</main>
+</body>
+</html>

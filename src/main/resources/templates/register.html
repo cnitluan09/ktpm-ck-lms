@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head><title>Đăng ký độc giả – LMS</title></head>
+<body>
+<main>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="mb-4">Đăng ký độc giả (UC01)</h2>
+
+      <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+      <div th:if="${error}"   class="alert alert-danger"  th:text="${error}"></div>
+
+      <form th:action="@{/register}" method="post" class="card card-body shadow-sm">
+        <div class="mb-3">
+          <label class="form-label">Mã độc giả</label>
+          <input type="text" name="readerId" class="form-control" placeholder="VD: R003" required/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Họ và tên</label>
+          <input type="text" name="name" class="form-control" placeholder="Tối đa 255 ký tự" required/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control" placeholder="example@mail.com" required/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Mật khẩu <small class="text-muted">(tối thiểu 6 ký tự)</small></label>
+          <input type="password" name="password" class="form-control" required/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Xác nhận mật khẩu</label>
+          <input type="password" name="confirmPassword" class="form-control" required/>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+      </form>
+    </div>
+  </div>
+</main>
+</body>
+</html>

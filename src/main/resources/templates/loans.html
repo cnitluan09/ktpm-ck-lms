@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head><title>Tất cả phiếu mượn – LMS</title></head>
+<body>
+<main>
+  <h2 class="mb-4">Tất cả phiếu mượn</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-secondary">
+        <tr><th>#</th><th>Độc giả</th><th>Sách</th><th>Trạng thái</th><th>Yêu cầu</th><th>Duyệt</th><th>Hạn trả</th><th>Ngày trả</th><th>Gia hạn</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="l : ${loans}">
+          <td th:text="${l.id}"></td>
+          <td th:text="${l.reader.name}"></td>
+          <td th:text="${l.book.title}"></td>
+          <td>
+            <span th:text="${l.status}"
+                  th:classappend="${l.status.name() == 'PENDING'} ? 'badge bg-warning text-dark' :
+                                   (${l.status.name() == 'BORROWED'} ? 'badge bg-info text-dark' :
+                                   (${l.status.name() == 'RETURNED'} ? 'badge bg-success' : 'badge bg-danger'))"></span>
+          </td>
+          <td th:text="${l.requestDate}"></td>
+          <td th:text="${l.approveDate}"></td>
+          <td th:text="${l.dueDate}"></td>
+          <td th:text="${l.returnDate}"></td>
+          <td th:text="${l.renewed} ? 'Có' : 'Không'"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>

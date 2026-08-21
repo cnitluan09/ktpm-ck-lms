@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head><title>Duyệt phiếu mượn – LMS</title></head>
+<body>
+<main>
+  <h2 class="mb-4">Duyệt / Từ chối phiếu mượn (UC11)</h2>
+
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}"   class="alert alert-danger"  th:text="${error}"></div>
+
+  <div th:if="${#lists.isEmpty(pendingLoans)}" class="alert alert-info">
+    Không có phiếu nào chờ duyệt.
+  </div>
+
+  <div th:each="l : ${pendingLoans}" class="card mb-3 shadow-sm">
+    <div class="card-header fw-bold">Phiếu #<span th:text="${l.id}"></span></div>
+    <div class="card-body">
+      <p class="mb-1"><strong>Độc giả:</strong> <span th:text="${l.reader.name + ' (' + l.reader.readerId + ')'}"></span></p>
+      <p class="mb-1"><strong>Sách:</strong> <span th:text="${l.book.title}"></span></p>
+      <p class="mb-3"><strong>Ngày yêu cầu:</strong> <span th:text="${l.requestDate}"></span></p>
+
+      <div class="d-flex gap-2 flex-wrap">
+        <!-- Duyệt -->
+        <form th:action="@{/approve}" method="post" class="d-flex gap-2 align-items-center">
+          <input type="hidden" name="loanId" th:value="${l.id}"/>
+          <input type="date" name="approveDate" class="form-control form-control-sm"
+                 th:value="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" required/>
+          <button type="submit" class="btn btn-success btn-sm">Duyệt</button>
+        </form>
+        <!-- Từ chối -->
+        <form th:action="@{/reject}" method="post">
+          <input type="hidden" name="loanId" th:value="${l.id}"/>
+          <button type="submit" class="btn btn-danger btn-sm"
+                  onclick="return confirm('Xác nhận từ chối phiếu này?')">Từ chối</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

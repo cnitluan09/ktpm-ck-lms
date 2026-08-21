@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head><title>Danh sách độc giả – LMS</title></head>
+<body>
+<main>
+  <h2 class="mb-4">Danh sách độc giả</h2>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead class="table-primary">
+        <tr><th>Mã</th><th>Họ tên</th><th>Email</th><th>Đang mượn</th><th>Nợ phạt (đ)</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="r : ${readers}">
+          <td th:text="${r.readerId}"></td>
+          <td th:text="${r.name}"></td>
+          <td th:text="${r.email}"></td>
+          <td th:text="${r.activeLoans}"></td>
+          <td th:text="${#numbers.formatInteger(r.debt, 0, 'COMMA')}"
+              th:classappend="${r.debt > 50000} ? 'text-danger fw-bold' : ''"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <a th:href="@{/register}" class="btn btn-primary">+ Thêm độc giả</a>
+</main>
+</body>
+</html>

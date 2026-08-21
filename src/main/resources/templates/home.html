@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::title}, ~{::main})}">
+<head><title>Trang chủ – LMS</title></head>
+<body>
+<main>
+  <h2 class="mb-4">Trang chủ</h2>
+
+  <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+  <div th:if="${error}"   class="alert alert-danger"  th:text="${error}"></div>
+
+  <!-- Danh sách sách -->
+  <h4>Danh sách sách</h4>
+  <div class="table-responsive mb-4">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-primary">
+        <tr><th>ISBN</th><th>Tên sách</th><th>Tác giả</th><th>Tổng</th><th>Còn lại</th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="b : ${books}">
+          <td th:text="${b.isbn}"></td>
+          <td th:text="${b.title}"></td>
+          <td th:text="${b.author}"></td>
+          <td th:text="${b.totalCopies}"></td>
+          <td>
+            <span th:text="${b.availableCopies}"
+                  th:classappend="${b.availableCopies == 0} ? 'text-danger fw-bold' : 'text-success fw-bold'"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phiếu chờ duyệt -->
+  <h4>Phiếu chờ duyệt <span class="badge bg-warning text-dark" th:text="${#lists.size(pendingLoans)}"></span></h4>
+  <div class="table-responsive mb-4">
+    <table class="table table-bordered align-middle">
+      <thead class="table-warning">
+        <tr><th>#</th><th>Độc giả</th><th>Sách</th><th>Ngày yêu cầu</th></tr>
+      </thead>
+      <tbody>
+        <tr th:if="${#lists.isEmpty(pendingLoans)}">
+          <td colspan="4" class="text-center text-muted">Không có phiếu chờ duyệt</td>
+        </tr>
+        <tr th:each="l : ${pendingLoans}">
+          <td th:text="${l.id}"></td>
+          <td th:text="${l.reader.name}"></td>
+          <td th:text="${l.book.title}"></td>
+          <td th:text="${l.requestDate}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phiếu đang mượn -->
+  <h4>Phiếu đang mượn <span class="badge bg-info text-dark" th:text="${#lists.size(borrowedLoans)}"></span></h4>
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-info">
+        <tr><th>#</th><th>Độc giả</th><th>Sách</th><th>Ngày duyệt</th><th>Hạn trả</th><th>Gia hạn?</th></tr>
+      </thead>
+      <tbody>
+        <tr th:if="${#lists.isEmpty(borrowedLoans)}">
+          <td colspan="6" class="text-center text-muted">Không có phiếu đang mượn</td>
+        </tr>
+        <tr th:each="l : ${borrowedLoans}">
+          <td th:text="${l.id}"></td>
+          <td th:text="${l.reader.name}"></td>
+          <td th:text="${l.book.title}"></td>
+          <td th:text="${l.approveDate}"></td>
+          <td th:text="${l.dueDate}"></td>
+          <td th:text="${l.renewed} ? 'Đã gia hạn' : 'Chưa'"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>
