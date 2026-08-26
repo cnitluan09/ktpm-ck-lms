@@ -65,7 +65,7 @@ class LibraryPlaywrightTest {
         page.navigate(url("/register"));
         page.fill("[name=readerId]", "PW_R01");
         page.fill("[name=name]", "Playwright User");
-        page.fill("[name=email]", "pw_r0112@test.com");
+        page.fill("[name=email]", "pw_r01@test.com");
         page.fill("[name=password]", "pass123");
         page.fill("[name=confirmPassword]", "pass123");
 
